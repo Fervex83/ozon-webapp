@@ -1,0 +1,9 @@
+__pycache__/
+.venv/
+ozon_profile_web/
+chromedriver.log
+*.log
+debug_body.txt
+debug_page.html
+debug_page.png
+job_history.jsonl

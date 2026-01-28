@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marketplace QA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body data-marketplace="ozon">
+  <div class="grain"></div>
+  <main class="shell">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Маркетплейс и ТС</h2>
+        </div>
+        <div class="panel-head-actions">
+          <label class="toggle">
+            <input type="checkbox" id="searchFreshProfile" checked />
+            <span>Новый профиль <span class="help-tip" id="freshProfileTip">?</span></span>
+          </label>
+          <label class="theme-toggle" title="Светлая/темная тема">
+            <input type="checkbox" id="themeToggle" />
+            <span class="theme-track">
+              <span class="theme-thumb"></span>
+              <span class="theme-icon theme-moon">☾</span>
+              <span class="theme-icon theme-sun">☀</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="grid grid-4">
+        <div class="field">
+          <label for="marketplace">Маркетплейс</label>
+          <select id="marketplace"></select>
+        </div>
+        <div class="field">
+          <label for="zoneSelect">Зона</label>
+          <select id="zoneSelect">
+            <option value="unauth">НЗ — неавторизованная</option>
+            <option value="auth">АЗ — авторизованная</option>
+          </select>
+        </div>
+        <div class="field" id="phoneField">
+          <label for="phoneInput">Номер (для АЗ)</label>
+          <input id="phoneInput" type="tel" placeholder="+7 900 000‑00‑00" />
+        </div>
+      </div>
+    </section>
+
+    <header class="hero">
+      <div class="hero-row">
+        <div class="hero-main">
+          <div class="badge">Ozon | Контроль офферов</div>
+          <h1 class="scenario-title">
+            <span class="scenario-label">Сценарий:</span>
+            <span class="scenario-name" id="scenarioTitle">—</span>
+          </h1>
+        </div>
+        <div class="field" id="tsField">
+          <label for="tsSelect">ТС</label>
+          <select id="tsSelect"></select>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Поиск и продавец</h2>
+          <p>Можно вводить вручную или выбирать из списка.</p>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="field-block" data-field="search">
+          <div class="field-head">
+            <h3>Поиск</h3>
+            <div class="mode-switch" data-target="search">
+              <button type="button" class="mode-btn active" data-mode="preset">Из списка</button>
+              <button type="button" class="mode-btn" data-mode="manual">Вручную</button>
+            </div>
+          </div>
+          <div class="field-body">
+            <div class="input-row">
+              <input id="searchInput" type="text" placeholder="Например, смартфон" />
+              <button type="button" class="ghost clear-btn" data-clear="search">Очистить</button>
+            </div>
+            <div class="preset-panel" data-panel="search">
+              <input id="searchFilter" type="text" placeholder="Фильтр значений" />
+              <div class="option-list" id="searchOptions"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-block" data-field="seller">
+          <div class="field-head">
+            <h3>Продавец</h3>
+            <div class="mode-switch" data-target="seller">
+              <button type="button" class="mode-btn active" data-mode="preset">Из списка</button>
+              <button type="button" class="mode-btn" data-mode="manual">Вручную</button>
+            </div>
+          </div>
+          <div class="field-body">
+            <div class="input-row">
+              <input id="sellerInput" type="text" placeholder="Например, OZON" />
+              <button type="button" class="ghost clear-btn" data-clear="seller">Очистить</button>
+            </div>
+            <div class="preset-panel" data-panel="seller">
+              <input id="sellerFilter" type="text" placeholder="Фильтр значений" />
+              <div class="option-list" id="sellerOptions"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel-compact">
+      <div class="panel-head">
+        <div>
+          <h2>Автопоиск</h2>
+          <p>Сбор карточек по поиску и продавцу. Результаты появятся в списке ниже.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="btn-row">
+          <button id="runSearchBtn" class="ghost">Запустить поиск</button>
+        </div>
+        <div class="queue-info" id="searchInfo">Поиск: ожидание</div>
+      </div>
+      <div class="queue-actions"></div>
+      <div class="grid grid-2">
+        <div class="field">
+          <a id="searchXlsxLinkTop" href="#" target="_blank" rel="noopener">Скачать XLSX (поиск)</a>
+        </div>
+        <div class="field">
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Правила</h2>
+          <p>Условия для маркировки ошибки и не‑ошибки. Можно выбирать несколько и добавлять вручную.</p>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="rule-card" data-rule="ok">
+          <div class="rule-head">
+            <h3>Не ошибка</h3>
+            <label class="toggle">
+              <input type="checkbox" id="okEnabled" checked />
+              <span>Включено</span>
+            </label>
+          </div>
+          <label for="okSelect">Выбор из списка</label>
+          <select id="okSelect" multiple class="hidden"></select>
+          <div id="okRuleList" class="rule-list"></div>
+          <div class="rule-actions">
+            <button type="button" class="ghost select-all" data-select-all="ok">Выбрать все</button>
+            <button type="button" class="ghost clear-select" data-clear-select="ok">Снять выбор</button>
+          </div>
+          <div class="rule-manual">
+            <div class="rule-row">
+              <input type="text" placeholder="Новое условие" />
+              <button type="button" class="ghost add-rule">Добавить</button>
+              <button type="button" class="ghost emoji-trigger">Emoji</button>
+            </div>
+            <div class="emoji-picker" data-picker="ok"></div>
+            <div class="rule-list" id="okManualList"></div>
+          </div>
+        </div>
+        <div class="rule-card" data-rule="error">
+          <div class="rule-head">
+            <h3>Ошибка</h3>
+            <label class="toggle">
+              <input type="checkbox" id="errorEnabled" />
+              <span>Включено</span>
+            </label>
+          </div>
+          <label for="errorSelect">Выбор из списка</label>
+          <select id="errorSelect" multiple class="hidden"></select>
+          <div id="errorRuleList" class="rule-list"></div>
+          <div class="rule-actions">
+            <button type="button" class="ghost select-all" data-select-all="error">Выбрать все</button>
+            <button type="button" class="ghost clear-select" data-clear-select="error">Снять выбор</button>
+          </div>
+          <div class="rule-manual">
+            <div class="rule-row">
+              <input type="text" placeholder="Новое условие" />
+              <button type="button" class="ghost add-rule">Добавить</button>
+              <button type="button" class="ghost emoji-trigger">Emoji</button>
+            </div>
+            <div class="emoji-picker" data-picker="error"></div>
+            <div class="rule-list" id="errorManualList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Информация по тестированию</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="btn-row">
+          <button id="runBatchBtn" class="btn-primary">Запустить тест</button>
+          <button id="resumeBatchBtn" class="ghost" style="display:none;">Продолжить тест</button>
+        </div>
+        <div class="queue-info" id="queueInfo">Очередь: ожидание</div>
+      </div>
+      <div class="queue-info" id="phaseInfo">Фаза: ожидание</div>
+      <div class="queue-info" id="etaInfo">Ожидаемое время: —</div>
+      <div class="queue-info" id="collectInfo">Собрано ссылок: —</div>
+      <div class="queue-info" id="phaseCounts">Продавец/Поиск: —</div>
+      <div class="queue-info" id="checkedCounts">Проверено карточек: —</div>
+      <div class="panel-actions">
+        <button id="stopBtn" class="btn-stop" disabled>СТОП</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Результаты</h2>
+        </div>
+        <div class="result-head-actions">
+          <a id="xlsxLink" href="#" target="_blank" rel="noopener">Скачать XLSX (тест)</a>
+          <span id="resultProgress" class="status-pill status-warn">0/0</span>
+          <span id="resultStatus" class="status-pill status-warn">Running</span>
+        </div>
+      </div>
+      <div class="result-filters">
+        <label class="toggle toggle-compact"><input type="checkbox" id="filterOk" checked />OK</label>
+        <label class="toggle toggle-compact"><input type="checkbox" id="filterNok" checked />NOK</label>
+        <label class="toggle toggle-compact"><input type="checkbox" id="filterUnknown" checked />Unknown</label>
+        <label class="toggle toggle-compact"><input type="checkbox" id="filterError" checked />Error</label>
+        <div class="result-stats" id="resultStats">Всего/OK/NOK/Другое: —</div>
+      </div>
+      <div class="result-group">
+        <h3>Ожидают проверки</h3>
+        <div class="result-list" id="pendingList"></div>
+      </div>
+      <div class="result-group">
+        <h3>Проверено</h3>
+        <div class="result-list" id="resultList"></div>
+      </div>
+    </section>
+
+    <section class="foot">
+      <div class="pill">Версия: <span>1.1</span></div>
+      <div class="pill">Режим: <span id="mode">web</span></div>
+    </section>
+  </main>
+
+  <script>
+    window.PAGE_CONFIG = {{ page_config|safe }};
+  </script>
+  <script src="/static/emoji.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
